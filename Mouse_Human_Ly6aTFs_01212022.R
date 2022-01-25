@@ -291,8 +291,8 @@ for (i in 1:ncol(HC_SMC)) {
 
 
 
-for (i in 1:nrow(TF_List)) {
-  for (j in 1:ncol(HC_SMC)) {
+for (j in 1:nrow(TF_List)) {
+  for (i in 1:ncol(HC_SMC)) {
     
     HC_SMC_common <- length(intersect(TF_List$TF_name[[j]], HC_SMC[[i]]))
     

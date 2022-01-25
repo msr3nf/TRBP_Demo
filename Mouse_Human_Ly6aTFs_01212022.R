@@ -257,10 +257,57 @@ write.csv(simplified_Table, "FINAL_candidateTF_gene_table_01252022.csv")
 
 ################comparing to human scRNA-seq data################
 HC_SMC <- read.csv("carotid_VSMC_cluster_markers copy.csv") #has top 50 marker genes for each cluster 
-TF_List <- filtered_Ly6a_TFs$TF_name
-Gene_List <- Table$`Ly6a Human Orthologous Genes in PDGF-BB-treated HCASMCs`
-length(unique(Table$`Ly6a Human Orthologous Genes in PDGF-BB-treated HCASMCs`)) #29 UNIQUE Gene
+TF_List <- as.data.frame(simplified_Table$`Ly6a TF name`)
+TF_List[2] <- NA
+colnames(TF_List)[2] <- "HumanCarotid_scRNA-seq_clusterNumber"
+colnames(TF_List)[1] <- "TF_name"
 
+Gene_List <- unique(Table$`Ly6a Human Orthologous Genes in PDGF-BB-treated HCASMCs`)
+Gene_List[2] <- NA
+colnames(Gene_List)[2] <- "HumanCarotid_scRNA-seq_clusterNumber"
+colnames(Gene_List)[1] <- "Gene_name"
+
+#length(unique(Table$`Ly6a Human Orthologous Genes in PDGF-BB-treated HCASMCs`)) #checking # of UNIQUE Gene (29)
+
+i=1
+j=1
+for (i in 1:ncol(HC_SMC)) {
+  for (j in 1:nrow(TF_List)) {
+    
+    HC_SMC_common <- length(intersect(TF_List$TF_name[[j]], HC_SMC[[i]]))
+
+
+  if (HC_SMC_common !=0) {
+    clusterNum <- colnames(HC_SMC)[[i]]
+    
+    TF_List$`HumanCarotid_scRNA-seq_clusterNumber`[[j]] <- paste0(clusterNum, sep=" ", collapse=",")
+  
+    }
+    
+  }
+  print(paste0(colnames(HC_SMC)[[i]], "_done"))
+  
+}
+
+
+
+for (i in 1:nrow(TF_List)) {
+  for (j in 1:ncol(HC_SMC)) {
+    
+    HC_SMC_common <- length(intersect(TF_List$TF_name[[j]], HC_SMC[[i]]))
+    
+    
+    if (HC_SMC_common !=0) {
+      clusterNum <- colnames(HC_SMC)[[i]]
+      
+      TF_List$`HumanCarotid_scRNA-seq_clusterNumber`[[j]] <- paste0(clusterNum, sep=" ", collapse=",")
+      
+    }
+    
+  }
+  print(paste0(colnames(HC_SMC)[[i]], "_done"))
+  
+}
 
 
 

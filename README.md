@@ -1,2 +1,2 @@
-# TRBP_Ly6a
-Transcriptional Regulation Bioinformatics Pipeline (TRBP)
+# TRBP_Demo
+Transcriptional Regulation Bioinformatics Pipeline (TRBP) 

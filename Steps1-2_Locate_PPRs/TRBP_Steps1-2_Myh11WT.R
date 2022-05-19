@@ -42,7 +42,7 @@ txdb <- TxDb.Mmusculus.UCSC.mm10.knownGene
 all_txdb_ids <- keys(TxDb.Mmusculus.UCSC.mm10.knownGene) 
 all_txdb_ids_table <- as.data.frame(all_txdb_ids)
 colnames(all_txdb_ids_table)[1] <- "list"
-check_list <- intersect(all_txdb_ids_table$list,mouseGenome$entrezgene_id) #THIS IS THE FINAL LIST of 220225 genes I will use
+check_list <- intersect(all_txdb_ids_table$list,mouseGenome$entrezgene_id) #This is the final list of 220225 genes I will use for the mouse genome
 check_list <- as.character(check_list)
 txbygene <- transcriptsBy(txdb, "gene")[check_list] 
 
@@ -58,7 +58,7 @@ fiveUTR <- fiveUTR[names(fiveUTR) %in% txid]
 
 length(fiveUTR)
 fiveUTR
-UTR_List <- as.data.frame(fiveUTR) #must break up files to get 1000 lines at a time for UCSC genome
+UTR_List <- as.data.frame(fiveUTR) 
 colnames(UTR_List)[2] <- "value"
 
 UTR_List1 <- merge(UTR_List, map1, by = "value")

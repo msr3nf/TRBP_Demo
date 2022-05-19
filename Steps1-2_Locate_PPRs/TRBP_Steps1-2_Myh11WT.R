@@ -80,8 +80,8 @@ length(unique(WholeGenome_List$entrezgene_id)) #19325 total number genes; note t
 for (i in 1:nrow(WholeGenome_List)) {
   if (WholeGenome_List$strand[[i]] == "+") {
     chrom <- WholeGenome_List$seqnames[[i]]
-    chromStart <- WholeGenome_List$start[[i]]-10000
-    chromEnd <- WholeGenome_List$start[[i]]+10000
+    chromStart <- WholeGenome_List$start[[i]]-10000 #this is where users can modify how many nucleotides upstream...
+    chromEnd <- WholeGenome_List$start[[i]]+10000 #... or downstream from the TSS comprise the PPR 
     Gene_name <- WholeGenome_List$external_gene_name[[i]]
     my.dnastring <- as.character(Biostrings::getSeq(Mmusculus, chrom, chromStart, chromEnd))
     

@@ -1,5 +1,5 @@
 setwd("~/Desktop/")
-# setwd("~/Desktop/R Pdgfrb:Dual")
+# This script allows you to create a mutated PPR and then find TF binding changes
 library(Biostrings)
 library(data.table)
 library(BSgenome.Mmusculus.UCSC.mm10)

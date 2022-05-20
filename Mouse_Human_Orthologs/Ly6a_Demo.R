@@ -1,4 +1,4 @@
-setwd("~/Desktop/R Pdgfrb:Dual")
+setwd("~/Desktop)
 #####ensuring PPR sequences are determined correctly#####
 
 library(Biostrings)

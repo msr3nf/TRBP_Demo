@@ -21,7 +21,7 @@ atherosclerosis.*
 
 <img width="511" alt="image" src="https://user-images.githubusercontent.com/62672439/169460026-f479ba43-4e16-43bc-942c-daf4b5f7d57b.png">
 
-To quickly access all input files and R scripts locally, we recommend cloning this repo into a local git folder via command line (i.e. $ git clone https://github.com/msr3nf/TRBP_Demo.git) and selecting this folder as your R directory.
+To quickly access all input files and R scripts locally, we recommend cloning this repo into a local git folder via command line (i.e. $ git clone https://github.com/msr3nf/TRBP_Demo.git) and selecting the git folder as your R directory.
 
 
 ### **Acknowledgements:**

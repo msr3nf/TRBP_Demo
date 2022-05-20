@@ -14,3 +14,26 @@ regulatory networks in VSMCs that can be therapeutically targeted for the treatm
 atherosclerosis.*
 
 <img width="511" alt="image" src="https://user-images.githubusercontent.com/62672439/169460026-f479ba43-4e16-43bc-942c-daf4b5f7d57b.png">
+
+**Acknowledgements:**
+*Owens Lab:*
+Gary Owens, PhD
+Vlad Serbulea, PhD
+Anita Salamon, MS
+James Martin, BA
+Rupande Tripathi, MS
+Laura Shankman, PhD
+Rebecca Deaton, PhD
+Sohel Shamsuzzaman, PhD
+
+*Miller Lab:* 
+Clint Miller, PhD
+Jose Verdezoto Mosquera, MS
+
+*Björkegren Lab:*
+Johan Björkegren, MD, PhD
+Giuseppe Mocci, PhD
+
+*Computational Support:*
+UVA Research Computing (Rivanna) 
+

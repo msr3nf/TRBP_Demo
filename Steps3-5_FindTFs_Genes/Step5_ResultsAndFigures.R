@@ -187,5 +187,28 @@ c <- VlnPlot(all.athero.cells.20dim.new.idents,features, stack = TRUE, sort = FA
 
 plot_grid(c)
 
+###making individual violin plots (code from Anita Salamon)###
+all.athero.cells.20dim.new.idents <- readRDS(file = "~/Desktop/R Pdgfrb:Dual/pdgf.all.athero.cells.integrated.26dim.new.idents.v2.new.version.rds")
+head(all.athero.cells.20dim.new.idents@meta.data)
+Idents(all.athero.cells.20dim.new.idents) <- "OriginalClusters"
+
+allCells <- c("_1","_2","_3","_4","_5","_6") #includes all cells
+medialCells <- rev(c("_1","_4","_2","_5")) #includes WT and KO medial cells
+medialUnsortedCells <- rev(c("_1","_4")) #includes WT and KO medial unsorted cells
+lesionCells <- rev(c("_3","_6")) #includes WT and KO lesion cells
+allWTCells <- c("_1","_2","_3") #only WT cells (both medial and lesion)
+allKOCells <- c("_4","_5","_6") #only KO cells (both medial and lesion)
+eyfpSortedCells <- c("_2","_5") #includes WT and KO eyfp sorted cells
+eyfpWTCells <- c("_2") #includes WT and KO eyfp sorted cells
+eyfpKOCells <- c("_5") #includes WT and KO eyfp sorted cells
+
+max_y = NULL
+
+vlnfeature = "Myh11" #enter gene of interest
+VlnPlot(all.athero.cells.20dim.new.idents,features = vlnfeature, log = FALSE,pt.size = 0,y.max = max_y, idents = c(1:7))+theme(text = element_text(size = 15),axis.text = element_text(size = 15),axis.text.x = element_text(angle = 0),axis.title = element_blank(),axis.text.y = element_blank())+NoLegend()
+
+
+
+
 
 

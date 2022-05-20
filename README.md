@@ -65,4 +65,4 @@ UVA Research Computing (Rivanna)
 
 ____________________________________
 
-*Created by Mahima Reddy, B.S.*
+*Created by Mahima Reddy*

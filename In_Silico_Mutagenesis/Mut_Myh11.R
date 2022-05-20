@@ -149,5 +149,112 @@ for (i in 1:nrow(finalTable)) {
 
 write.csv(finalTable, "Mut_All_geneFreq_05042022.csv")
 finalTable <- read.csv("Mut_All_geneFreq_05042022.csv")
+#########################################################
+#step1: identify where regulatory region is located
+Myh11_TFs_WT <- read.csv("Myh11_TF_list_wMouseGenesONLY_031820222_FINAL.csv")
 
+#upstream SRF region= chr16:14289628-14289644
+#downstream SRF region= chr16:chr16:14292512-14292528
+
+# Myh11_TFs_upperBound <- subset(Myh11_TFs_WT, subset = chromStart > 14289628 & chromEnd < 14292528)
+# rm(Myh11_TFs_upperBound) # rm() clears specific items from environment 
+# rm(Myh11_TFs_narrow)
+Myh11_TFs_WTnarrow <- subset(Myh11_TFs_WT, subset = chromStart >= 14289628 & chromEnd <= 14292528) #9700 TFs in 2900 bp region
+
+{
+  listMarts()
+  ensembl=useMart("ensembl")
+  listDatasets(ensembl)
+  ensembl=useDataset("mmusculus_gene_ensembl", mart=ensembl)
+  listAttributes(mart=ensembl)
+  
+  annoMouse <- getBM(attributes = c("ensembl_gene_id_version", "ensembl_gene_id", "entrezgene_id", 
+                                    "mgi_symbol", "description", "external_gene_name"), mart=ensembl)
+}
+
+
+mouse = useMart("ensembl", dataset = "mmusculus_gene_ensembl")
+homologues <- getBM(attributes = c("external_gene_name", "hsapiens_homolog_associated_gene_name"), filters = "external_gene_name", values = annoMouse$mgi_symbol, mart = mouse)
+
+percentTable <- homologues
+length(unique(percentTable$mgi_symbol))
+colnames(percentTable)[1] <- "mgi_symbol" #note that these are NOT exlusively protein-coding genes
+percentTable["Frequency"] <- NA
+percentTable["Frequency"] <- 0
+percentTable["Associated_Myh11_TFs"] <- NA
+
+resultsTable <- Myh11_TFs_WTnarrow
+resultsTable <- 
+
+dataSet <- resultsTable
+geneList <- (unlist(strsplit(dataSet$Mouse_Genes_with_TF_sequence, " "))) #add TF_name
+geneList <- gsub(",", "", gsub("([a-zA-Z]),", "\\1 ", geneList))
+geneList <- as.data.table(geneList)
+colnames(geneList)[1] <- "gene"
+geneList$gene <- str_trim(geneList$gene, "right")
+
+frequencyTable <- table(geneList$gene)
+frequencyTable <- as.data.table(frequencyTable) #this is my frequency table!
+colnames(frequencyTable)[1] <- "mgi_symbol"
+colnames(frequencyTable)[2] <- "Frequency"
+
+library(dplyr)
+finalTable <- percentTable %>% inner_join(frequencyTable,by="mgi_symbol")
+finalTable <- finalTable[,-3]
+colnames(finalTable)[4] <- "Frequency"
+finalTable['% of Myh11 TFs that bind Mouse gene’s PPR'] <- NA
+
+
+for (i in 1:nrow(finalTable)) {
+  finalTable$`% of Myh11 TFs that bind Mouse gene’s PPR`[[i]] <- finalTable$Frequency[[i]]/(length(Myh11_TFs_WTnarrow$X))*100
+}
+
+write.csv(finalTable, "narrowPPR_Myh11_WT_05062022.csv")
+narrowPPR_Myh11_WT <- read.csv("narrowPPR_Myh11_WT_05062022.csv")
+
+#####determine which genes experience most TF reg changes#####
+setwd("~/Desktop/R Pdgfrb:Dual/scRNA-seq_murineMarkers")
+my_col = c("gene")
+L_sc_up = list.files(pattern=paste0("scRNA_up")) #make sure previous versions of code/files not saved (otherwise out of bounds error)
+df_sc_up <- lapply(setNames(L_sc_up, tools::file_path_sans_ext(basename(L_sc_up))), read.csv) 
+desc_sc_up = lapply(df_sc_up, "[", , my_col)
+
+L_sc_down = list.files(pattern=paste0("scRNA_down")) #make sure previous versions of code/files not saved (otherwise out of bounds error)
+df_sc_down <- lapply(setNames(L_sc_down, tools::file_path_sans_ext(basename(L_sc_down))), read.csv) 
+desc_sc_down = lapply(df_sc_down, "[", , my_col)
+setwd('..')
+
+percentDiff['Murine_RNA-seq_cluster_UP'] <- NA
+percentDiff['Murine_RNA-seq_cluster_DOWN'] <- NA
+
+i=1
+j=1
+for (j in 1:nrow(percentDiff)) {
+  for (i in 1:length(desc_sc_up)){
+    if (percentDiff$mgi_symbol[[j]] %in% desc_sc_up[[i]] == TRUE)
+      
+      percentDiff$`Murine_RNA-seq_cluster_UP`[[j]] <- paste0(percentDiff$`Murine_RNA-seq_cluster_UP`[[j]],"cluster_",i,",")
+  }
+  print(paste0(percentDiff$mgi_symbol[[j]],"_",i,"_done"))
+}
+
+
+
+i=1
+j=1
+for (j in 1:nrow(percentDiff)) {
+  for (i in 1:length(desc_sc_down)){
+    if (percentDiff$mgi_symbol[[j]] %in% desc_sc_down[[i]] == TRUE)
+      
+      percentDiff$`Murine_RNA-seq_cluster_DOWN`[[j]] <- paste0(percentDiff$`Murine_RNA-seq_cluster_DOWN`[[j]],"cluster_",i,",")
+  }
+  print(paste0(percentDiff$mgi_symbol[[j]],"_",i,"_done"))
+}
+
+write.csv(percentDiff, "percentDiff_table_Myh11_WT_mutAll_murine_scRNA-seq.csv")
+
+percentDiff <- subset(percentDiff, subset = `Murine_RNA-seq_cluster_UP` != " " | `Murine_RNA-seq_cluster_DOWN` != " " )
+#723 genes potentially modulated with murine SMC significance
+
+write.csv(percentDiff, "FINALpercentDiff_table_Myh11_WT_mutAll_murine_scRNA-seq.csv")
 

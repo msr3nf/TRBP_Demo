@@ -1,5 +1,5 @@
 setwd("~/Desktop/")
-
+#the first part of this script is similar to the 04292022 R script, but the second half shows how we computed TF changes between WT and mutated Myh11 PPRs
 library(Biostrings)
 library(data.table)
 library(BSgenome.Mmusculus.UCSC.mm10)

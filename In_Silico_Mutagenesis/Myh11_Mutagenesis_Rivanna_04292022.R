@@ -151,3 +151,4 @@ for (i in 1:nrow(finalTable)) {
 
 write.csv(finalTable, "Mut_All_geneFreq_05042022.csv")
 finalTable <- read.csv("Mut_All_geneFreq_05042022.csv")
+ 

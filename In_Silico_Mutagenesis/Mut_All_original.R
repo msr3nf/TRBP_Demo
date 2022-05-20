@@ -1,5 +1,6 @@
 setwd("~/Desktop")
-
+#the first part of this script is similar to the 04292022 R script, but the second half shows how we computed TF changes between WT and mutated Myh11 PPRs
+##because this is the original script written, there is some repetitive code that was generated while troubleshooting but may be helpful for users attempting to understand how our algorithms were developed
 library(jsonlite)
 library(tidyverse)
 library(httr)
@@ -22,12 +23,6 @@ dir.create("~/Desktop/R Pdgfrb:Dual/20kb_PPR_mm10")
 setwd("~/Desktop/R Pdgfrb:Dual/20kb_PPR_mm10")
 
 write.csv(WholeGenome_List[1:5000,], "WholeGenome_List_mm10_20kPPRseq_pt1.csv")
-write.csv(WholeGenome_List[5001:10000,], "WholeGenome_List_mm10_20kPPRseq_pt2.csv")
-write.csv(WholeGenome_List[10001:15000,], "WholeGenome_List_mm10_20kPPRseq_pt3.csv")
-write.csv(WholeGenome_List[15001:20000,], "WholeGenome_List_mm10_20kPPRseq_pt4.csv")
-write.csv(WholeGenome_List[20001:25000,], "WholeGenome_List_mm10_20kPPRseq_pt5.csv")
-write.csv(WholeGenome_List[25001:26000,], "WholeGenome_List_mm10_20kPPRseq_pt5.csv")
-
 
 unique_Mut_ALL_TFseq <- as.data.frame(unique(Myh11_TFs_Mut_ALL$TF_sequence))
 colnames(unique_Mut_ALL_TFseq)[1] <- "TF_sequence"
@@ -47,7 +42,6 @@ write.csv(unique_Mut_ALL_TFseq, "unique_Mut_ALL_TFseq_TEST_05032022.csv")
 
 #control shift C comments out (and in) chunks of code :)
 
-#38057020
 ##alternate method:
 
 library(tidyverse)
@@ -403,8 +397,7 @@ setwd('..')
 percentDiff['Murine_RNA-seq_cluster_UP'] <- NA
 percentDiff['Murine_RNA-seq_cluster_DOWN'] <- NA
 
-i=1
-j=1
+
 for (j in 1:nrow(percentDiff)) {
   for (i in 1:length(desc_sc_up)){
     if (percentDiff$mgi_symbol[[j]] %in% desc_sc_up[[i]] == TRUE)
@@ -416,8 +409,6 @@ for (j in 1:nrow(percentDiff)) {
 
 
 
-i=1
-j=1
 for (j in 1:nrow(percentDiff)) {
   for (i in 1:length(desc_sc_down)){
     if (percentDiff$mgi_symbol[[j]] %in% desc_sc_down[[i]] == TRUE)

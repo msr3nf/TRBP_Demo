@@ -15,7 +15,9 @@ pipeline can help predict changes to TF regulatory mechanisms after mutating cis
 interest.* 
 
 *4. Finally, we offer a feature that helps users identify orthologous TFs and co-regulated gene sets
-between humans and mice. We hope that the results of our pipeline will help identify novel transcriptional
+between humans and mice.*
+
+*We ultimately hope that the results of our pipeline will help identify novel transcriptional
 regulatory networks in VSMCs that can be therapeutically targeted for the treatment of advanced
 atherosclerosis.*
 

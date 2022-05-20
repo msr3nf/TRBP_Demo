@@ -156,4 +156,36 @@ contractile_genes <- subset(Myh11_Freq_Table, subset = mgi_symbol %in% c("Myh11"
 contractile_genes <- contractile_genes[,-1]
 write.csv(contractile_genes, "contractile_genes_Myh11_FreqTable.csv") #to save data for future
 
+#####making violin plots for genes of interest using scRNA-seq data #####
+library(Seurat)
+library(ggplot2)
+library(cowplot)
+
+#load the scRNA-seq data
+all_plaque <- readRDS(file = "~/Desktop/git/Myh11_Input_Files/pdgf.all.athero.cells.integrated.26dim.new.idents.v2.new.version.rds") #download from Myh11_Input_Files
+datasetUSE = subset(all_plaque, subset = origin == "SMC_Klf4_WT_eYFP_Positive")
+
+#load the TRBP-generated data
+data_raw <- read.csv("Myh11_orthGenesbyTFpercent_andNumUNIQUE_TFs_HCscRNAseq_03182022_20kPPR.csv")
+data <- data_raw [,-3] #human genes not relevant at this step
+data <- distinct(data, mgi_symbol, .keep_all=TRUE)
+##check unique mouse genes are same)
+length(unique(data_raw$mgi_symbol))
+length(unique(data$mgi_symbol))
+##checks out
+data_new <- data[order(data$Percent_of_Myh11_TFs_that_bind_Mouse_gene_PPR, decreasing = TRUE), ]  # Order data descending
+top10 <- data_new[1:10,]
+
+##making the violin plots (stacked)
+features <-c(top10$mgi_symbol)
+
+c <- VlnPlot(all.athero.cells.20dim.new.idents,features, stack = TRUE, sort = FALSE, flip = TRUE, 
+             log = FALSE,pt.size = 0,y.max = max_y, 
+             idents = c(1:7))+theme(text = element_text(size = 15),
+                                    axis.text = element_text(size = 15),axis.text.x = element_text(angle = 0),
+                                    axis.title = element_blank(),axis.text.y = element_blank())+NoLegend()
+
+plot_grid(c)
+
+
 

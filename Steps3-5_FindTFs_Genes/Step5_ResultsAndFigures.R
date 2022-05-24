@@ -187,6 +187,14 @@ c <- VlnPlot(all.athero.cells.20dim.new.idents,features, stack = TRUE, sort = FA
 
 plot_grid(c)
 
+###making UMAPs###
+
+all_PDGF_WT_YFPpos <- subset(all_plaque, subset = orig.ident == "SMC.PDGFRB.WT.YFP.POS.MEDIA.cells")
+FeaturePlot(all_PDGF_WT_YFPpos, features="Myh11", min.cutoff = 0, cols = rev(rainbow(32,start=0,end=0.7)))
+FeaturePlot(all_PDGF_WT_YFPpos, features="Macf1", min.cutoff = 0, cols = rev(rainbow(32,start=0,end=0.7)))
+FeaturePlot(all_PDGF_WT_YFPpos, features="Ank2", min.cutoff = 0, cols = rev(rainbow(32,start=0,end=0.7)))
+FeaturePlot(all_PDGF_WT_YFPpos, features="Dlg2", min.cutoff = 0, cols = rev(rainbow(32,start=0,end=0.7)))
+
 ###making individual violin plots (code from Anita Salamon)###
 all.athero.cells.20dim.new.idents <- readRDS(file = "~/Desktop/R Pdgfrb:Dual/pdgf.all.athero.cells.integrated.26dim.new.idents.v2.new.version.rds")
 head(all.athero.cells.20dim.new.idents@meta.data)

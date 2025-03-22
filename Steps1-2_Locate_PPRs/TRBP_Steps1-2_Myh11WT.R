@@ -109,5 +109,6 @@ WholeGenome_List <- WholeGenome_List[!duplicated(WholeGenome_List$PPR_sequence),
 WholeGenome_List <- WholeGenome_List[,-1]
 WholeGenome_List <- WholeGenome_List[,-c(2,3,7,10)]
 WholeGenome_List <- WholeGenome_List[,-c(8)]
+write.csv(WholeGenome_List1, "WholeGenome_List_mm10_20kPPRseq_03222025.trimmed.csv")
 
 

@@ -175,7 +175,7 @@ length(unique(step2$MouseTF_name))
 write.csv(step2, "Ly6a_TFnames_wHumanOrth.csv")
 
 i=2508
-#repeat loop until row lengths for step2 and ly6a_TFs line up? need to optimize this... 
+#repeat loop until row lengths for step2 and ly6a_TFs line up 
 for (i in 1:nrow(Ly6a_mouseTFs)) {
   value <- length(intersect((Ly6a_mouseTFs$TF_name[[i]]), step2$MouseTF_name))
   

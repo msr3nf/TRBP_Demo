@@ -73,8 +73,7 @@ WholeGenome_List['PPR_sequence'] <- NA
 length(unique(WholeGenome_List$entrezgene_id)) #19325 total number genes; note there are repeats for different gene versions
 
 #####STEP 2:#####
-#Note: If determining PPR information for large list of genes, such as an organism's entire genome, we do NOT recommend running the following loop locally
-##Therefore, we strongly suggest running this code on a high-performance computing system 
+#Note: If determining PPR information for large list of genes, such as an organism's entire genome, users can alternatively run the following code on a high-performance computing system to reduce computing time
 ###When determining the nucleotide strings for PPRs, this loop accounts for whether the TSS is on the negative or positive strand of DNA
 
 for (i in 1:nrow(WholeGenome_List)) {

@@ -201,7 +201,7 @@ Ly6a_mouseTFs <- Ly6a_mouseTFs[,-c(1)]
 Ly6a_mouseTFs[2,10]
 
 i=2
-#repeat loop until same number of rows appears --> need to revise this loop
+#repeat loop until same number of rows appears
 
 for (i in 1:nrow(Ly6a_mouseTFs)) {
   if (Ly6a_mouseTFs[i,10] == "") {

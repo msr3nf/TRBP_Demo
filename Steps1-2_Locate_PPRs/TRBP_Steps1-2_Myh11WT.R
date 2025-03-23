@@ -18,6 +18,7 @@ library(purrr)
 library(TxDb.Mmusculus.UCSC.mm10.knownGene)
 library(GenomicFeatures)
 library(dplyr)
+library(GenomicRanges)
 
 #####STEP 1:#####
 ##We have already defined our gene of interest as Myh11, so we will now use the Ensembl database to gather information for our gene list of interest, which consists of all genes in the murine genome (including our input gene, Myh11)

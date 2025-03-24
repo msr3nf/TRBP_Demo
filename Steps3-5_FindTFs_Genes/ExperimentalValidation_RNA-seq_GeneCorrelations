@@ -1,1 +1,52 @@
+setwd("/Users/desktop/") 
+library(ggpubr)
+library(ggplot2)
+
+data.SMC <- read.csv("/Users/Downloads/GFA_2020.01.VS-E080-2.normalized-counts.csv", row.names=1)
+metadata.SMC <- read.csv("/Users/Downloads/GFA_2020.01.VS-E080-2.sampleinfo.csv")
+metadata.SMC$ID <- colnames(data.SMC)
+data.corr <- data.SMC
+Myh11.row <- subset(data.corr, rownames(data.corr) %in% "Myh11")
+Ly6a.row <- subset(data.corr, rownames(data.corr) %in% "Ly6a")
+
+row_sums <- rowSums(data.corr)
+filtered_matrix <- data.corr[row_sums >= 40, ]
+filtered_matrix <- filtered_matrix[!grepl("NA", rownames(filtered_matrix)), ]
+filtered_matrix <- filtered_matrix[,c(1:4, 13:16)] #selecting for relevant in vitro conditions
+metadata.SMC <- metadata.SMC[c(1:4, 13:16),] #selecting for relevant in vitro conditions
+#TESTING:Ly6a-specific TFs FOS and Atf3 
+#co-regulate Tns1, Thsd4, Rcan2, Ptprd, Cpne4, Col15a1, and Ablim1
+gene1_expr <- as.numeric(filtered_matrix["Fos", ]) #replace with first gene of interest (i.e. input gene like Myh11)
+gene2_expr <- as.numeric(filtered_matrix["Atf3", ]) #replace with second gene of interest (i.e. predicted co-regulated gene)
+IDs <- rownames(filtered_matrix)
+#regression_model <- lm(gene2_expr ~ gene1_expr)
+#summary(regression_model)
+cor_result <- cor.test(gene1_expr, gene2_expr, method = "pearson", use = "complete.obs")
+rval <- round(cor_result$estimate, 4)
+p_value <- round(cor_result$p.value, 20)
+rval
+p_value
+
+data.d <- data.frame(gene1 = gene1_expr, gene2 = gene2_expr)
+data.d$group <- metadata.SMC$condition 
+ggplot(data.d, aes(x = gene1, y = gene2)) +  # No need to color by 'group'
+  geom_point(aes(color = group)) +  # Color the points based on 'group'
+  geom_smooth(method = "lm", color = "red", se = FALSE) +  # Linear trend line (no confidence interval)
+  stat_cor(method = "pearson", label.x =0, label.y = max(data.d$gene2), size = 5) +  # Add overall Pearson correlation and p-value
+  theme_minimal() +
+  labs(title = "Gene1 (Ly6a) vs Gene2 (Ablim1) Expression",
+       x = "Gene1 (Ly6a) Expression", 
+       y = "Gene2 (Ablim1) Expression") +
+  theme(legend.position = "right")
+#plot with no group discrimination:
+ggplot(data.d, aes(x = gene1, y = gene2)) +
+  geom_point(color = "blue") +  # Scatter plot of the data
+  geom_smooth(method = "lm", color = "red", se = FALSE) +  # Linear trend line (no confidence interval)
+  stat_cor(method = "pearson", label.x = 0, label.y = max(gene2_expr), size = 5) +  # Add Pearson correlation and p-value
+  theme_minimal() +
+  labs(title = "Gene1 (Myh11) vs Gene2 (Max) Expression",
+       x = "Gene1 (Myh11) Expression", 
+       y = "Gene2 (Max) Expression") +
+  theme(legend.position = "right")
+
 

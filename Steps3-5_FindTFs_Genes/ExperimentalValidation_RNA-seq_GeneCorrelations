@@ -2,8 +2,8 @@ setwd("/Users/desktop/")
 library(ggpubr)
 library(ggplot2)
 
-data.SMC <- read.csv("/Users/Downloads/GFA_2020.01.VS-E080-2.normalized-counts.csv", row.names=1)
-metadata.SMC <- read.csv("/Users/Downloads/GFA_2020.01.VS-E080-2.sampleinfo.csv")
+data.SMC <- read.csv("/Users/Downloads/GFA_2020.01.VS-E080-2.normalized-counts_clean.csv", row.names=1)
+metadata.SMC <- read.csv("/Users/Downloads/GFA_2020.01.VS-E080-2.sampleinfo_clean.csv")
 metadata.SMC$ID <- colnames(data.SMC)
 data.corr <- data.SMC
 Myh11.row <- subset(data.corr, rownames(data.corr) %in% "Myh11")

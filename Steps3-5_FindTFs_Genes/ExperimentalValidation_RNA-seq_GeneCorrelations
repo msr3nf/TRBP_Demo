@@ -6,8 +6,6 @@ data.SMC <- read.csv("/Users/Downloads/GFA_2020.01.VS-E080-2.normalized-counts_c
 metadata.SMC <- read.csv("/Users/Downloads/GFA_2020.01.VS-E080-2.sampleinfo_clean.csv")
 metadata.SMC$ID <- colnames(data.SMC)
 data.corr <- data.SMC
-Myh11.row <- subset(data.corr, rownames(data.corr) %in% "Myh11")
-Ly6a.row <- subset(data.corr, rownames(data.corr) %in% "Ly6a")
 
 row_sums <- rowSums(data.corr)
 filtered_matrix <- data.corr[row_sums >= 40, ]

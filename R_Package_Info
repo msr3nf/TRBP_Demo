@@ -1,0 +1,26 @@
+R Package	Version
+BiocManager	1.30.25
+BiocManager::version()	3.19
+biomaRt	2.60.1
+Biostrings	2.72.1
+BSgenome.Mmusculus.UCSC.mm10	1.4.3
+data.table	1.17.0
+dplyr	1.1.4
+DrugBank	5.1.13
+GenomicFeatures	1.56.0
+GenomicRanges	1.56.2
+ggplot2	3.5.1
+ggpubr	0.6.0
+httr	1.4.7
+JASPAR2022	0.99.8
+jsonlite	1.9.1
+magrittr	2.0.3
+memes	1.12.1
+org.Hs.eg.db	3.19.1
+org.Mm.eg.db	3.19.1
+purrr	1.0.4
+stringr	1.5.1
+TFBSTools	1.42.0
+tidyverse	2.0.0
+TxDb.Mmusculus.UCSC.mm10.knownGene	3.10.0
+universalmotif	1.22.3

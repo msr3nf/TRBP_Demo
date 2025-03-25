@@ -10,8 +10,7 @@ data.corr <- data.SMC
 row_sums <- rowSums(data.corr)
 filtered_matrix <- data.corr[row_sums >= 40, ]
 filtered_matrix <- filtered_matrix[!grepl("NA", rownames(filtered_matrix)), ]
-filtered_matrix <- filtered_matrix[,c(1:4, 13:16)] #selecting for Ly6a-relevant in vitro conditions
-metadata.SMC <- metadata.SMC[c(1:4, 13:16),] #selecting for Ly6a-relevant in vitro conditions
+metadata.SMC <- metadata.SMC 
 #TESTING:Ly6a-specific TFs FOS and Atf3 
 #co-regulate Tns1, Thsd4, Rcan2, Ptprd, Cpne4, Col15a1, and Ablim1
 gene1_expr <- as.numeric(filtered_matrix["Fos", ]) #replace with first gene of interest (i.e. input gene like Myh11)

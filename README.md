@@ -4,7 +4,7 @@
 
 Welcome to our repository (repo) for the TRBP! All of the code used to generate the results described in the attached document above and summarized below can be found in this repo. 
 
-*1. As a a proof of principle, we show that our pipeline identifies previously validated transcription factors (TFs) as co-regulators of
+*1. As a a proof of principle, we show that our strategy identifies previously validated transcription factors (TFs) as co-regulators of
 a set of known VSMC contractile genes (Myh11, Acta2, Tagln, and Cnn1).* 
 
 *2. We also propose a novel set of

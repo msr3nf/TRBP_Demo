@@ -20,7 +20,7 @@ curated.genomes$fasta <- paste(">", curated.genomes$X, "\n", curated.genomes$PPR
 colnames(curated.genomes)
 
 #converting PPR sequences to BStringSet for runMeme
-fasta_sequences <- BStringSet(curated.genomes$PPR_sequence) #has 89 sequences
+fasta_sequences <- BStringSet(as.character(curated.genomes$PPR_sequence)) #has 89 sequences
 names(fasta_sequences) <- paste0("seq_", seq_along(fasta_sequences)) #need unique identifier
 #now identify the motifs
 meme_results <- runMeme(fasta_sequences, alph = "dna", parse_genomic_coord = FALSE, nmotifs = 10, minw=6, minw=50) #based on the recommended parameters from the website

@@ -43,7 +43,7 @@ tomtom_results <- runTomTom(motifs)
 #Extract "best match name" (the TF) for all motifs in tomtom_results --> this is the final TF list
 best_match_TF_names <- sapply(tomtom_results, function(x) x$best_match_name)
 best_match_consensus <- sapply(tomtom_results, function(x) x$consensus) #note the IUPAC nucleotide code
-best_match_TF_df <- data.frame(best_match_name = unique(unlist(best_match_names)))
+best_match_TF_df <- data.frame(best_match_name = unique(unlist(best_match_TF_names)))
 best_match_consensus_df <- data.frame(best_consensus = unique(unlist(best_match_consensus)))
 final.result <- cbind(best_match_TF_df, best_match_consensus_df)
                               

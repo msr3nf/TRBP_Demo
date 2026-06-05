@@ -580,7 +580,6 @@ for (j in 1:nrow(Gene_List)) {
   
 }
 
-#automate nanodrop steps
 
 
 

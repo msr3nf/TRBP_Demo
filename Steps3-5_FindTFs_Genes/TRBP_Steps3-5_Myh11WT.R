@@ -33,8 +33,8 @@ write.csv(Myh11_PPR, "Myh11_TF_list_20kBPregion.csv")
 PPR_start <- 14291365-10000
 PPR_end <- 14291365+10000
 #REST API from UCSC Genome for retrieving TFs assocaited with PPR
-responseTF = fromJSON("https://api.genome.ucsc.edu/getData/track?genome=mm10;track=hub_186875_JASPAR2022_TFBS_mm10;chrom=chr16;start=14281365;end=14301365")
-Myh11_TF_list <- responseTF$hub_186875_JASPAR2022_TFBS_mm10
+responseTF = fromJSON("https://api.genome.ucsc.edu/getData/track?genome=mm10;track=jaspar2022;chrom=chr16;start=14281365;end=14301365")
+Myh11_TF_list <- responseTF$jaspar2022
 colnames(Myh11_TF_list)[4] <- "MatrixID"
 colnames(Myh11_TF_list)[7] <- "TF_name"
 write.csv(Myh11_TF_list, "Myh11_TF_list_20kBPregion.csv")

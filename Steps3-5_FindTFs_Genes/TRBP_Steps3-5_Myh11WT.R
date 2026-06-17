@@ -57,6 +57,19 @@ for (i in 1:nrow(Myh11_TF_list)) {
 write.csv(Myh11_TF_list, "Myh11_TF_list_20kBPregion_03162022.csv")
 Myh11_TF_list <- read.csv("Myh11_TF_list_20kBPregion_03162022.csv")
 
+#faster implementation of above:
+{
+  gr <- GRanges(
+  seqnames = Myh11_TF_list$chrom,
+  ranges = IRanges(
+    start = Myh11_TF_list$chromStart,
+    end   = Myh11_TF_list$chromEnd
+  )
+)
+seqs <- Biostrings::getSeq(Mmusculus, gr)
+Myh11_TF_list$TF_sequence <- as.character(seqs)
+write.csv(Myh11_TF_list, "Myh11_TF_list_20kBPregion_03162022.csv")
+}
 
 Myh11_TF_list <- Myh11_TF_list[,-1]
 Myh11_TF_list['Mouse_Genes_with_TF_sequence'] <- NA

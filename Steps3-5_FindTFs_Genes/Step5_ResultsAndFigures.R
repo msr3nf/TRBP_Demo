@@ -66,15 +66,6 @@ for (i in 1:nrow(finalTable)) {
   finalTable$`% of Myh11 TFs that bind Mouse gene’s PPR`[[i]] <- finalTable$Frequency[[i]]/75532*100
 }
 
-finalTable <- percentTable %>% inner_join(frequencyTable,by="mgi_symbol")
-finalTable <- finalTable[,-3]
-colnames(finalTable)[4] <- "Frequency"
-finalTable['% of Myh11 TFs that bind Mouse gene’s PPR'] <- NA
-
-for (i in 1:nrow(finalTable)) {
-  finalTable$`% of Myh11 TFs that bind Mouse gene’s PPR`[[i]] <- finalTable$Frequency[[i]]/75532*100
-}
-
 #OPTIONAL: determine whether human orthologs of mouse genes appear in human scRNA-seq data --> users can load their own -omics data of interest
 finalTable['HumanCarotid_scRNA-seq_cluster'] <- NA
 HC_SMC <- read.csv("carotid_VSMC_cluster_markers copy.csv") #has top 50 marker genes for each cluster 

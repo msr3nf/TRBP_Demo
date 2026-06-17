@@ -63,12 +63,10 @@ Myh11_TF_list <- read.csv("Myh11_TF_list_20kBPregion_03162022.csv")
   seqnames = Myh11_TF_list$chrom,
   ranges = IRanges(
     start = Myh11_TF_list$chromStart,
-    end   = Myh11_TF_list$chromEnd
-  )
-)
-seqs <- Biostrings::getSeq(Mmusculus, gr)
-Myh11_TF_list$TF_sequence <- as.character(seqs)
-write.csv(Myh11_TF_list, "Myh11_TF_list_20kBPregion_03162022.csv")
+    end   = Myh11_TF_list$chromEnd))
+  seqs <- Biostrings::getSeq(Mmusculus, gr)
+  Myh11_TF_list$TF_sequence <- as.character(seqs)
+  write.csv(Myh11_TF_list, "Myh11_TF_list_20kBPregion_03162022.csv")
 }
 
 Myh11_TF_list <- Myh11_TF_list[,-1]

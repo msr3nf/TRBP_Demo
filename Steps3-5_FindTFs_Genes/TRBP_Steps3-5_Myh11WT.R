@@ -79,7 +79,7 @@ Myh11_TF_list <- subset(Myh11_TF_list, subset = chromEnd < 14301365 )
 
 #####STEP 4:#####
 #Identify all genes with PPRs that can bind Myh11 TFs --> this code does not require parallel processing (i.e. run locally using small gene lists/PPR sizes)
-##We do not reccomend this method for whole genome queries
+##Option 1: While we do not reccomend the following method for whole genome queries (see Option 3), it is suffient for smaller lists:
 for (j in 1:nrow(Myh11_TF_list)) {
   result <- WholeGenome_List[WholeGenome_List$PPR_sequence %like% Myh11_TF_list$TF_sequence[[j]], ]
   result_mouse_gene <- paste(as.character(unique(result[[18]])), sep="' '", collapse=", ") #col #16 has all gene names
@@ -90,7 +90,7 @@ for (j in 1:nrow(Myh11_TF_list)) {
 }
 write.csv(Myh11_TF_list, "Myh11_TF_list_wMouseGenesONLY_031720222.csv")
 
-##The recommended, faster method that is optimal for HPCS is shown below:
+##Option 2: The recommended, faster method that is optimal for HPCS is shown below:
 
 unique_Myh11_TFseq <- as.data.frame(unique(Myh11_TF_list$TF_sequence))
 colnames(unique_Myh11_TFseq)[1] <- "TF_sequence"
@@ -131,6 +131,7 @@ allTiers <- allTiers[,-1]
 #check that the split TF sequences align --> sum should be 30968
 length(intersect(allTiers$TF_sequence, Myh11_TF_list$TF_sequence)) #checks out --> should be 30968 with all files
 
+
 #match gene lists by Myh11-specific TF seq
 i=1
 resultsTable <- Myh11_TF_list
@@ -147,4 +148,28 @@ for (i in 1:nrow(allTiers)) {
 length(intersect(resultsTable$TF_sequence, allTiers$TF_sequence)) #all check out!
 write.csv(resultsTable, "Myh11_TF_list_wMouseGenesONLY_031820222_FINAL.csv")
 
+##Option 3: The latest and fastest implementation for whole genome queries:
+{
+  library(stringi)
+  library(parallel)
+tf_seqs <- Myh11_TF_list$TF_sequence
+gene_seqs <- WholeGenome_List$PPR_sequence
+gene_names <- WholeGenome_List[[14]]  # your gene columnn
+
+Myh11_TF_list$NEWMouse_Genes_with_TF_sequence <- NA_character_
+cl <- makeCluster(detectCores() - 1)
+clusterExport(cl, c("tf_seqs", "gene_seqs", "gene_names"))
+  
+res <- parLapply(cl, seq_along(tf_seqs), function(j) { 
+  hits <- stringi::stri_detect_fixed(gene_seqs, tf_seqs[j])
+  matched <- gene_names[hits]
+  paste(unique(matched), collapse = ", ")
+})
+
+stopCluster(cl)
+
+Myh11_TF_list$NEWMouse_Genes_with_TF_sequence <- unlist(res)
+write.csv(Myh11_TF_list, "Myh11_TF_list_wMouseGenesONLY_031820222_FINAL.csv")
+
+}
 #now you have a preliminary results table showing TFs with all potentially co-regulated genes whose PPRs can bind TFs!

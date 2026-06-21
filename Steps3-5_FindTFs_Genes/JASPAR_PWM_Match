@@ -1,1 +1,78 @@
+WholeGenome_List <- read.csv("/home/reddyms/TRBS_materials/WholeGenome_List_mm10_20kPPRseq_03162022.csv") #this is a large file, so we recommend subsetting for a smaller list of genes or using a high-performance computing system (HPCS) 
+WholeGenome_List <- WholeGenome_List[,-1]
 
+Myh11_PPR <- subset(WholeGenome_List, subset = mgi_symbol== "Myh11")
+#write.csv(Myh11_PPR, "Myh11_TF_list_20kBPregion.csv")
+
+PPR_start <- 14291365-10000
+PPR_end <- 14291365+10000
+
+responseTF = fromJSON("https://api.genome.ucsc.edu/getData/track?genome=mm10;track=jaspar2022;chrom=chr16;start=14281365;end=14301365")
+Myh11_TF_list <- responseTF$jaspar2022
+colnames(Myh11_TF_list)[4] <- "MatrixID"
+colnames(Myh11_TF_list)[7] <- "TF_name"
+
+TF_set <- unique(Myh11_TF_list$MatrixID)
+length(unique(Myh11_TF_list$TF_name))
+length(unique(Myh11_TF_list$MatrixID))
+
+pfm <- getMatrixSet(JASPAR2022, opts = list()) #tested by setting to specific species but this excludes canonical/lit based
+pwms <- toPWM(pfm)
+
+pwms_seed <- lapply(pwms[names(pwms) %in% TF_set], function(x) {
+  as.matrix(x)
+})
+
+promoterSeqs <- DNAStringSet(WholeGenome_List$PPR_sequence)
+names(promoterSeqs) <- WholeGenome_List$mgi_symbol
+promoterSeqs <- promoterSeqs[!duplicated(names(promoterSeqs))]
+
+myh11_hits <- lapply(
+  pwms_seed,
+  function(pwm) {
+    length(matchPWM(
+      pwm,
+      myh11_seq,
+      min.score = "80%"
+    )) > 0
+  }
+)
+
+myh11_hits <- unlist(myh11_hits)
+
+myh11_tf_set <- names(myh11_hits)[myh11_hits]
+length(myh11_tf_set)
+
+scan_pwm <- function(pwm, promoters, gene_names,
+                     min.score = "80%") {
+  
+  hits <- vapply(
+    promoters,
+    function(seq) {
+      length(
+        matchPWM(
+          pwm,
+          seq,
+          min.score = min.score
+        )
+      ) > 0
+    },
+    logical(1)
+  )
+  
+  gene_names[hits]
+}
+pwms_myh11 <- pwms_seed[names(pwms_seed) %in% myh11_tf_set]
+tf_gene_hits <- bplapply(
+  pwms_myh11,
+  scan_pwm,
+  promoters = promoterSeqs,
+  gene_names = gene_names,
+  min.score = "80%",
+  BPPARAM = bp
+)
+{
+  names(tf_gene_hits) <- names
+  tf_gene_hits_80v2 <- tf_gene_hits
+  write.csv(tf_gene_hits_80v2, "tf_gene_hits_80v2.csv")
+  a

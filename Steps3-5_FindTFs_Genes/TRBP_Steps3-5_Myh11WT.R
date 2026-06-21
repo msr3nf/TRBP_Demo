@@ -150,8 +150,8 @@ write.csv(resultsTable, "Myh11_TF_list_wMouseGenesONLY_031820222_FINAL.csv")
 
 ##Option 3: The latest and fastest implementation for whole genome queries:
 {
-  library(stringi)
-  library(parallel)
+library(stringi)
+library(parallel)
 tf_seqs <- Myh11_TF_list$TF_sequence
 gene_seqs <- WholeGenome_List$PPR_sequence
 gene_names <- WholeGenome_List[[14]]  # your gene columnn

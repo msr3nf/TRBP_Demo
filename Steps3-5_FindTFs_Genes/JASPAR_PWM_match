@@ -75,4 +75,18 @@ tf_gene_hits <- bplapply(
   names(tf_gene_hits) <- names
   tf_gene_hits_80v2 <- tf_gene_hits
   write.csv(tf_gene_hits_80v2, "tf_gene_hits_80v2.csv")
+
+  all_hits <- unlist(tf_gene_hits_80v2)
+  frequencyTable <- as.data.frame(table(all_hits))
+  colnames(frequencyTable) <- c("mgi_symbol", "Frequency")
   
+  frequencyTable <- frequencyTable[
+    order(frequencyTable$Frequency, decreasing = TRUE),
+  ]
+  n_tfs <- length(tf_gene_hits)
+  frequencyTable$Percent_TFs_Binding <-
+    100 * frequencyTable$Frequency / n_tfs
+  
+  summary(frequencyTable$Percent_TFs_Binding)
+  write.csv(frequencyTable, "frequencyTable_80v2.csv")
+}

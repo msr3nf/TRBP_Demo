@@ -43,10 +43,10 @@ myh11_hits <- unlist(myh11_hits)
 myh11_tf_set <- names(myh11_hits)[myh11_hits]
 length(myh11_tf_set)
 
+#min.score below can be changed to "40%", "60%,' etc.
 scan_pwm <- function(pwm, promoters, gene_names,
-                     min.score = "80%") {
-  
-  hits <- vapply(
+                     min.score = "80%") 
+{ hits <- vapply(
     promoters,
     function(seq) {
       length(

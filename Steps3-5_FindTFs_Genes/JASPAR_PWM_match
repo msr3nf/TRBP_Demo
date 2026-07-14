@@ -26,6 +26,7 @@ pwms_seed <- lapply(pwms[names(pwms) %in% TF_set], function(x) {
 promoterSeqs <- DNAStringSet(WholeGenome_List$PPR_sequence)
 names(promoterSeqs) <- WholeGenome_List$mgi_symbol
 promoterSeqs <- promoterSeqs[!duplicated(names(promoterSeqs))]
+myh11_seq <- DNAString(Myh11_PPR$PPR_sequence[1])
 
 myh11_hits <- lapply(
   pwms_seed,
@@ -63,6 +64,9 @@ scan_pwm <- function(pwm, promoters, gene_names,
   gene_names[hits]
 }
 pwms_myh11 <- pwms_seed[names(pwms_seed) %in% myh11_tf_set]
+bp <- MulticoreParam(workers = 20)
+gene_names <- names(promoterSeqs)
+
 tf_gene_hits <- bplapply(
   pwms_myh11,
   scan_pwm,

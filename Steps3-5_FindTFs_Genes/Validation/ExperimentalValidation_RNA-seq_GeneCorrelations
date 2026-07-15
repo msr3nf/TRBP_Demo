@@ -50,7 +50,7 @@ ggplot(data.d, aes(x = gene1, y = gene2)) +
 ####(resuming after line 12)
 filtered_matrix <- filtered_matrix[!grepl("NA", rownames(filtered_matrix)), ]
 metadata.SMC <- metadata.SMC 
-{#checking gene IDs:
+{#checking gene IDs: Include only genes with matching mouse gene symbols in the expression matrix and annotation file
   genes <- rownames(filtered_matrix)
   length(genes)
   head(genes)

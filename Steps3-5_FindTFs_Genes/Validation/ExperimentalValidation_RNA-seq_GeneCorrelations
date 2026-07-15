@@ -46,4 +46,48 @@ ggplot(data.d, aes(x = gene1, y = gene2)) +
        y = "Gene2 (Max) Expression") +
   theme(legend.position = "right")
 
+#####identify correlation of every mouse gene in genome and apply multiple testing corrections#####
+####(resuming after line 12)
+filtered_matrix <- filtered_matrix[!grepl("NA", rownames(filtered_matrix)), ]
+metadata.SMC <- metadata.SMC 
+{#checking gene IDs:
+  genes <- rownames(filtered_matrix)
+  length(genes)
+  head(genes)
+  
+  sum(genes %in% annoMouse$mgi_symbol)
+  length(genes)
+  
+  match_rate <- mean(genes %in% annoMouse$mgi_symbol)
+  match_rate
+  
+  unmatched_genes <- genes[!genes %in% annoMouse$mgi_symbol]
+  
+  length(unmatched_genes)
+  head(unmatched_genes, 50)
+}
+
+myh11_expr <- as.numeric(filtered_matrix["Myh11", ])
+genes <- intersect(exactTable$mgi_symbol, rownames(filtered_matrix))
+gene_mat <- filtered_matrix[genes, ]
+
+#Pearson correlations
+cors <- apply(gene_mat, 1, function(x)
+  cor(x, myh11_expr, use = "complete.obs", method = "pearson")
+)
+
+n <- apply(gene_mat, 1, function(x)
+  sum(complete.cases(x, myh11_expr))
+)
+
+{
+  tvals <- cors * sqrt((n - 2)/(1 - cors^2))
+  pvals <- 2 * pt(-abs(tvals), df = n - 2)
+  
+  #Add to exactTable
+  exactTable$Myh11_correlation <- cors[match(exactTable$mgi_symbol, genes)]
+  exactTable$Myh11_pvalue <- pvals[match(exactTable$mgi_symbol, genes)]
+  exactTable$Myh11_padj <- p.adjust(exactTable$Myh11_pvalue, method = "BH")
+}
+write.csv(exactTable, "/Users/Downloads/Myh11_exact.match.Table-correlations-pval_06172026.csv")
 

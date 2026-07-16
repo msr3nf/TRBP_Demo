@@ -140,7 +140,7 @@ run_myh11_analysis <- function(exactTable, expr_matrix, gene_name = "Myh11", fre
   ))
 }
 
-extactTable1 <- exactTable
+extactTable1 <- exactTable #here, we show for only exact match method, but this was repeated for results of 40/60/80% PWM matching. Repeat as needed
 res_exact <- run_myh11_analysis(
   extactTable1,
   filtered_matrix,

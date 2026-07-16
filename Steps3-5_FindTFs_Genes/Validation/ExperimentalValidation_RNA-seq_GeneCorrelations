@@ -75,15 +75,12 @@ gene_mat <- filtered_matrix[genes, ]
 cors <- apply(gene_mat, 1, function(x)
   cor(x, myh11_expr, use = "complete.obs", method = "pearson")
 )
-
 n <- apply(gene_mat, 1, function(x)
   sum(complete.cases(x, myh11_expr))
 )
-
 {
   tvals <- cors * sqrt((n - 2)/(1 - cors^2))
   pvals <- 2 * pt(-abs(tvals), df = n - 2)
-  
   #Add to exactTable
   exactTable$Myh11_correlation <- cors[match(exactTable$mgi_symbol, genes)]
   exactTable$Myh11_pvalue <- pvals[match(exactTable$mgi_symbol, genes)]
@@ -96,14 +93,12 @@ run_myh11_analysis <- function(exactTable, expr_matrix, gene_name = "Myh11", fre
   
   # expression vector
   gene_expr <- as.numeric(expr_matrix[gene_name, ])
-  
   genes <- intersect(exactTable$mgi_symbol, rownames(expr_matrix))
   gene_mat <- expr_matrix[genes, ]
   
   # correlations (fast row-wise apply)
   cors <- apply(gene_mat, 1, function(x)
-    cor(x, gene_expr, use = "complete.obs", method = "pearson")
-  )
+    cor(x, gene_expr, use = "complete.obs", method = "pearson"))
   
   # sample size
   n <- apply(gene_mat, 1, function(x)
@@ -158,15 +153,12 @@ chisq.test(tab)$residuals
 pairs <- combn(levels(factor(exactTable$freq_quartile)), 2, simplify = FALSE)
 
 pair_results <- do.call(rbind, lapply(pairs, function(pr) {
-  
   sub <- exactTable[exactTable$freq_quartile %in% pr, ]
-  
   tab <- table(
     factor(sub$freq_quartile),
     factor(sub$sig, levels = c(FALSE, TRUE))
   )
-  
-  # safety check
+  # safety check:
   if (nrow(tab) < 2 || any(rowSums(tab) == 0)) {
     return(data.frame(
       group1 = pr[1],
@@ -174,9 +166,7 @@ pair_results <- do.call(rbind, lapply(pairs, function(pr) {
       p_value = NA
     ))
   }
-  
   test <- prop.test(tab[, "TRUE"], rowSums(tab), correct = FALSE)
-  
   data.frame(
     group1 = pr[1],
     group2 = pr[2],

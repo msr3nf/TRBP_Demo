@@ -8,7 +8,7 @@ metadata.SMC$ID <- colnames(data.SMC)
 data.corr <- data.SMC
 
 row_sums <- rowSums(data.corr)
-filtered_matrix <- data.corr[row_sums >= 40, ]
+filtered_matrix <- data.corr[row_sums >= 40, ] #optional; can comment out to keep all genes
 filtered_matrix <- filtered_matrix[!grepl("NA", rownames(filtered_matrix)), ]
 metadata.SMC <- metadata.SMC 
 #TESTING:Ly6a-specific TFs FOS and Atf3 

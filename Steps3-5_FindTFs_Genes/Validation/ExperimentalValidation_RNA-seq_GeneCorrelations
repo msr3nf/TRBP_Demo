@@ -91,3 +91,98 @@ n <- apply(gene_mat, 1, function(x)
 }
 write.csv(exactTable, "/Users/Downloads/Myh11_exact.match.Table-correlations-pval_06172026.csv")
 
+#####now creating a function to stratify genes into quartiles and perform Chi-square testing + pairwise analyses to assess correlations of lower tier genes:#####
+run_myh11_analysis <- function(exactTable, expr_matrix, gene_name = "Myh11", freq_col) {
+  
+  # expression vector
+  gene_expr <- as.numeric(expr_matrix[gene_name, ])
+  
+  genes <- intersect(exactTable$mgi_symbol, rownames(expr_matrix))
+  gene_mat <- expr_matrix[genes, ]
+  
+  # correlations (fast row-wise apply)
+  cors <- apply(gene_mat, 1, function(x)
+    cor(x, gene_expr, use = "complete.obs", method = "pearson")
+  )
+  
+  # sample size
+  n <- apply(gene_mat, 1, function(x)
+    sum(complete.cases(x, gene_expr))
+  )
+  
+  # p-values
+  tvals <- cors * sqrt((n - 2) / (1 - cors^2))
+  pvals <- 2 * pt(-abs(tvals), df = n - 2)
+  
+  # attach results
+  exactTable$Myh11_correlation <- cors[match(exactTable$mgi_symbol, genes)]
+  exactTable$Myh11_pvalue <- pvals[match(exactTable$mgi_symbol, genes)]
+  exactTable$Myh11_padj <- p.adjust(exactTable$Myh11_pvalue, method = "BH")
+  
+  # significance
+  exactTable$sig <- exactTable$Myh11_padj < 0.05
+  
+  # frequency quartiles (robust handling of duplicates in quantiles)
+  freq <- exactTable[[freq_col]]
+  
+  exactTable$freq_quartile <- cut(
+    freq,
+    breaks = quantile(freq, probs = seq(0, 1, 0.25), na.rm = TRUE),
+    include.lowest = TRUE
+  )
+  
+  # proportion significant per quartile
+  prop_table <- aggregate(sig ~ freq_quartile, exactTable, mean, na.rm = TRUE)
+  
+  return(list(
+    table = exactTable,
+    summary = prop_table
+  ))
+}
+
+extactTable1 <- exactTable
+res_exact <- run_myh11_analysis(
+  extactTable1,
+  filtered_matrix,
+  gene_name = "Myh11",
+  freq_col = "% of Myh11 TFs that bind Mouse gene’s PPR"
+)
+res_exact$summary
+tab <- table(res_80v2$table$freq_quartile, res_80v2$table$sig)
+
+tab <- table(exactTable$freq_quartile, exactTable$sig)
+
+chisq.test(tab)
+prop.table(tab, 1)
+chisq.test(tab)$residuals
+pairs <- combn(levels(factor(exactTable$freq_quartile)), 2, simplify = FALSE)
+
+pair_results <- do.call(rbind, lapply(pairs, function(pr) {
+  
+  sub <- exactTable[exactTable$freq_quartile %in% pr, ]
+  
+  tab <- table(
+    factor(sub$freq_quartile),
+    factor(sub$sig, levels = c(FALSE, TRUE))
+  )
+  
+  # safety check
+  if (nrow(tab) < 2 || any(rowSums(tab) == 0)) {
+    return(data.frame(
+      group1 = pr[1],
+      group2 = pr[2],
+      p_value = NA
+    ))
+  }
+  
+  test <- prop.test(tab[, "TRUE"], rowSums(tab), correct = FALSE)
+  
+  data.frame(
+    group1 = pr[1],
+    group2 = pr[2],
+    p_value = test$p.value
+  )
+}))
+
+pair_results$padj <- p.adjust(pair_results$p_value, method = "BH")
+pair_results

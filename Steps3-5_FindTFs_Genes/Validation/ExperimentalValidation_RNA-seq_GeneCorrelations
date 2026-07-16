@@ -186,3 +186,12 @@ pair_results <- do.call(rbind, lapply(pairs, function(pr) {
 
 pair_results$padj <- p.adjust(pair_results$p_value, method = "BH")
 pair_results
+
+#example for repeating for PWM matching:
+  # res_60 <- run_myh11_analysis(
+  #   table60,
+  #   filtered_matrix,
+  #   gene_name = "Myh11",
+  #   freq_col = "Percent_TFs_Binding"
+  # )
+

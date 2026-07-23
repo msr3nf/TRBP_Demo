@@ -90,50 +90,40 @@ write.csv(exactTable, "/Users/Downloads/Myh11_exact.match.Table-correlations-pva
 
 #here we can automate our correlation scatter plots to include the p-adj values:
 plot_gene <- function(gene){
-  
   gene2_expr <- as.numeric(filtered_matrix[gene, ])
-  
-  # Pearson correlation
+  #Pearson correlation
   cor_result <- cor.test(
     myh11_expr,
     gene2_expr,
     method = "pearson",
     use = "complete.obs"
   )
-  
   rval <- cor_result$estimate
   pval <- cor_result$p.value
-  
-  # Pull FDR from genome-wide correlation table
+  #Pull FDR from genome-wide correlation table
   padj <- exactTable$Myh11_padj[
-    match(gene, exactTable$mgi_symbol)
-  ]
-  
+    match(gene, exactTable$mgi_symbol)]
   # Data frame for plotting
   data.d <- data.frame(
     Myh11 = myh11_expr,
     Gene = gene2_expr,
     group = metadata.SMC$condition
   )
-  
-  # Annotation text
+  #Annotation text
   label_text <- paste0(
     "R = ", round(rval, 3),
     "\np = ", signif(pval, 3),
     "\npadj = ", signif(padj, 3)
   )
-  
-  # Plot
+  #Plot
   ggplot(data.d, aes(x = Myh11, y = Gene)) +
     geom_point(
       aes(color = group),
-      size = 3
-    ) +
+      size = 3) +
     geom_smooth(
       method = "lm",
       color = "red",
-      se = FALSE
-    ) +
+      se = FALSE) +
     annotate(
       "text",
       x = min(data.d$Myh11),
@@ -141,14 +131,12 @@ plot_gene <- function(gene){
       hjust = 0,
       vjust = 1,
       label = label_text,
-      size = 6
-    ) +
+      size = 6) +
     labs(
       title = paste0("Myh11 vs. ", gene),
       x = "Myh11 normalized counts",
       y = paste0(gene, " normalized counts"),
-      color = "Treatment"
-    ) +
+      color = "Treatment") +
     theme_classic() +
     theme(
       legend.position = "none", #can change to bottom to add
@@ -156,15 +144,11 @@ plot_gene <- function(gene){
       plot.title = element_text(
         hjust = 0.5,
         face = "bold",
-        size = 18
-      ),
+        size = 18),
       axis.title = element_text(
-        size = 16,
-      ),
+        size = 16,),
       axis.text = element_text(
-        size = 14
-      )
-    )
+        size = 14))
 }
 
 plot_gene("Acta2")

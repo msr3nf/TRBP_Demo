@@ -206,6 +206,34 @@ max_y = NULL
 vlnfeature = "Myh11" #enter gene of interest
 VlnPlot(all.athero.cells.20dim.new.idents,features = vlnfeature, log = FALSE,pt.size = 0,y.max = max_y, idents = c(1:7))+theme(text = element_text(size = 15),axis.text = element_text(size = 15),axis.text.x = element_text(angle = 0),axis.title = element_blank(),axis.text.y = element_blank())+NoLegend()
 
+#for dot plot of candidate genes:
+ features <- top10$mgi_symbol
+ features <- rev(top10$mgi_symbol)
+{
+  DotPlot(
+    subset(
+      all_plaque,
+      idents = 1:7),
+    features = features) +
+    coord_flip() +
+    scale_color_gradient2(
+      low = "blue",
+      mid = "white",
+      high = "red",
+      midpoint = 0) +
+    theme(
+      text = element_text(size = 16),
+      axis.text.x = element_text(size = 14),
+      axis.text.y = element_text(size = 14),
+      axis.title = element_blank(),
+      legend.position = "right",
+      legend.direction = "vertical",
+      legend.box = "vertical") +
+    guides(
+      color = guide_colorbar(title = "Average Expression"),
+      size = guide_legend(title = "% Expressing"))
+}
+
 
 
 

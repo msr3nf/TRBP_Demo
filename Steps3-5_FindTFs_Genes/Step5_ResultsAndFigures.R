@@ -170,7 +170,7 @@ top10 <- data_new[1:10,]
 ##making the violin plots (stacked)
 features <-c(top10$mgi_symbol)
 
-c <- VlnPlot(all.athero.cells.20dim.new.idents,features, stack = TRUE, sort = FALSE, flip = TRUE, 
+c <- VlnPlot(all_plaque,features, stack = TRUE, sort = FALSE, flip = TRUE, 
              log = FALSE,pt.size = 0,y.max = max_y, 
              idents = c(1:7))+theme(text = element_text(size = 15),
                                     axis.text = element_text(size = 15),axis.text.x = element_text(angle = 0),
